@@ -31,6 +31,7 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="jp.techacademy.rika.hataji.taskapp.MainActivity" />
         </activity>
+        <receiver android:name=".TaskAlarmReceiver"/>
     </application>
 
 </manifest>

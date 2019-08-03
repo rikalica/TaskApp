@@ -108,6 +108,7 @@ class InputActivity : AppCompatActivity() {
         if (mTask == null) {
             // 新規作成の場合
             mTask = Task()
+
             val taskRealmResults = realm.where(Task::class.java).findAll()
 
             val identifier: Int =
