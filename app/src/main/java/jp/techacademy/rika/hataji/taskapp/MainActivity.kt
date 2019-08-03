@@ -8,6 +8,8 @@ import io.realm.RealmChangeListener
 import io.realm.Sort
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.app.AlarmManager
+import android.app.PendingIntent
 
 const val EXTRA_TASK = "jp.techacademy.taro.kirameki.taskapp.TASK"
 
@@ -63,6 +65,17 @@ class MainActivity : AppCompatActivity() {
                 mRealm.beginTransaction()
                 results.deleteAllFromRealm()
                 mRealm.commitTransaction()
+
+                val resultIntent = Intent(applicationContext, TaskAlarmReceiver::class.java)
+                val resultPendingIntent = PendingIntent.getBroadcast(
+                    this@MainActivity,
+                    task.id,
+                    resultIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+
+                val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+                alarmManager.cancel(resultPendingIntent)
 
                 reloadListView()
             }

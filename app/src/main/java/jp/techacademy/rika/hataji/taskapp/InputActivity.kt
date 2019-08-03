@@ -1,7 +1,10 @@
 package jp.techacademy.rika.hataji.taskapp
 
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
@@ -11,7 +14,6 @@ import kotlinx.android.synthetic.main.content_input.*
 import java.util.*
 
 class InputActivity : AppCompatActivity() {
-
     private var mYear = 0
     private var mMonth = 0
     private var mDay = 0
@@ -25,9 +27,11 @@ class InputActivity : AppCompatActivity() {
                 mYear = year
                 mMonth = month
                 mDay = dayOfMonth
-                val dateString = mYear.toString() + "/" + String.format("%02d", mMonth + 1) + "/" + String.format("%02d", mDay)
+                val dateString =
+                    mYear.toString() + "/" + String.format("%02d", mMonth + 1) + "/" + String.format("%02d", mDay)
                 date_button.text = dateString
-            }, mYear, mMonth, mDay)
+            }, mYear, mMonth, mDay
+        )
         datePickerDialog.show()
     }
 
@@ -38,7 +42,8 @@ class InputActivity : AppCompatActivity() {
                 mMinute = minute
                 val timeString = String.format("%02d", mHour) + ":" + String.format("%02d", mMinute)
                 times_button.text = timeString
-            }, mHour, mMinute, false)
+            }, mHour, mMinute, false
+        )
         timePickerDialog.show()
     }
 
@@ -51,19 +56,17 @@ class InputActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input)
 
-        // ActionBarを設定する
+        //ActionBarを設定する
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
 
-        // UI部品の設定
         date_button.setOnClickListener(mOnDateClickListener)
         times_button.setOnClickListener(mOnTimeClickListener)
         done_button.setOnClickListener(mOnDoneClickListener)
 
-        // EXTRA_TASK から Task の id を取得して、 id から Task のインスタンスを取得する
         val intent = intent
         val taskId = intent.getIntExtra(EXTRA_TASK, -1)
         val realm = Realm.getDefaultInstance()
@@ -71,7 +74,6 @@ class InputActivity : AppCompatActivity() {
         realm.close()
 
         if (mTask == null) {
-            // 新規作成の場合
             val calendar = Calendar.getInstance()
             mYear = calendar.get(Calendar.YEAR)
             mMonth = calendar.get(Calendar.MONTH)
@@ -79,7 +81,6 @@ class InputActivity : AppCompatActivity() {
             mHour = calendar.get(Calendar.HOUR_OF_DAY)
             mMinute = calendar.get(Calendar.MINUTE)
         } else {
-            // 更新の場合
             title_edit_text.setText(mTask!!.title)
             content_edit_text.setText(mTask!!.contents)
 
@@ -91,8 +92,8 @@ class InputActivity : AppCompatActivity() {
             mHour = calendar.get(Calendar.HOUR_OF_DAY)
             mMinute = calendar.get(Calendar.MINUTE)
 
-            val dateString = mYear.toString() + "/" + String.format("%02d", mMonth + 1) + "/" + String.format("%02d", mDay)
-            val timeString = String.format("%02d", mHour) + ":" + String.format("%02d", mMinute)
+            val dateString = mYear.toString() + "/" + String.format("%02d", mMinute)
+            val timeString = String.format("02d", mHour) + ":" + String.format("%02d", mMinute)
 
             date_button.text = dateString
             times_button.text = timeString
@@ -107,7 +108,6 @@ class InputActivity : AppCompatActivity() {
         if (mTask == null) {
             // 新規作成の場合
             mTask = Task()
-
             val taskRealmResults = realm.where(Task::class.java).findAll()
 
             val identifier: Int =
@@ -132,5 +132,17 @@ class InputActivity : AppCompatActivity() {
         realm.commitTransaction()
 
         realm.close()
+
+        val resultIntent = Intent(applicationContext, TaskAlarmReceiver::class.java)
+        resultIntent.putExtra(EXTRA_TASK, mTask!!.id)
+        val resultPendingIntent = PendingIntent.getBroadcast(
+            this,
+            mTask!!.id,
+            resultIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, resultPendingIntent)
     }
 }
