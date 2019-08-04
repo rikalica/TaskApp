@@ -24,6 +24,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/title_edit_text"
             android:hint="内容" />
+    <EditText
+            android:id="@+id/category_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_edit_text"
+            android:hint="カテゴリ" />
     <Button
             android:id="@+id/date_button"
             android:layout_width="0dp"
