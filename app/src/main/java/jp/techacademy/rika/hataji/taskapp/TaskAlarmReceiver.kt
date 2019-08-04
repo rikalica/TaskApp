@@ -42,7 +42,6 @@ class TaskAlarmReceiver : BroadcastReceiver() {
         builder.setTicker(task!!.title)   // 5.0以降は表示されない
         builder.setContentTitle(task.title)
         builder.setContentText(task.contents)
-        builder.setContentCategory(task.category)
 
         // 通知をタップしたらアプリを起動するようにする
         val startAppIntent = Intent(context, MainActivity::class.java)
