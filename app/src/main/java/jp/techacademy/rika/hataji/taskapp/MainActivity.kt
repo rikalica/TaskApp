@@ -10,13 +10,14 @@ import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.View
 
 
 const val EXTRA_TASK = "jp.techacademy.rika.hataji.taskapp.TASK"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mRealm: Realm
     private val mRealmListener = object : RealmChangeListener<Realm> {
         override fun onChange(element: Realm) {
@@ -26,22 +27,27 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mTaskAdapter: TaskAdapter
     
-    var toolbar : Toolbar = view.findViewById(R.id.toolbar)
-    toolbar.inflateMenu(R.menu.search)
 
-    mSearchView = (SearchView) toolbar.getMenu().findItem(R.id.menu_search).getActionView()
-    mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-        override fun onQueryTextSubmit(s: String) {
-            return false
-        }
-        override fun onQueryTextChange(s: String) {
-            return false
-        }
-    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+
+
+        var toolbar : Toolbar = view.findViewById(R.id.toolbar)
+        toolbar.inflateMenu(R.menu.search)
+
+        mSearchView = (SearchView) toolbar.getMenu().findItem(R.id.menu_search).getActionView()
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            override fun onQueryTextSubmit(s: String) {
+                return false
+            }
+            override fun onQueryTextChange(s: String) {
+                return false
+            }
+        })
 
         fab.setOnClickListener { view ->
             val intent = Intent(this@MainActivity, InputActivity::class.java)
