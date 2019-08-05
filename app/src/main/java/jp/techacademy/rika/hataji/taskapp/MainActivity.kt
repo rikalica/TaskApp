@@ -17,7 +17,7 @@ import android.view.View
 
 const val EXTRA_TASK = "jp.techacademy.rika.hataji.taskapp.TASK"
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var mRealm: Realm
     private val mRealmListener = object : RealmChangeListener<Realm> {
         override fun onChange(element: Realm) {
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private lateinit var mTaskAdapter: TaskAdapter
-    
+    private lateinit var mSearchView: SearchView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +36,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
 
-        var toolbar : Toolbar = view.findViewById(R.id.toolbar)
-        toolbar.inflateMenu(R.menu.search)
+        var toolbar : Toolbar = findViewById(R.id.toolbar)
+        toolbar.inflateMenu(R.menu.menu_main)
 
-        mSearchView = (SearchView) toolbar.getMenu().findItem(R.id.menu_search).getActionView()
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView = toolbar.getMenu().findItem(R.id.menu_search).getActionView() as SearchView
+        //mSearchView.setOnQueryTextListener(mSearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String) {
                 return false
             }
