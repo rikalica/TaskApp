@@ -10,6 +10,9 @@ import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.support.v7.widget.Toolbar
+import android.view.View
+
 
 const val EXTRA_TASK = "jp.techacademy.rika.hataji.taskapp.TASK"
 
@@ -26,6 +29,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+
+        searchView.setOnClickListener { view ->
+            val intent = Intent(this@MainActivity, InputActivity::class.java)
+            startActivity(intent)
+        }
 
         fab.setOnClickListener { view ->
             val intent = Intent(this@MainActivity, InputActivity::class.java)
