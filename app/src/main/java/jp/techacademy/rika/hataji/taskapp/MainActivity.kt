@@ -25,18 +25,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var mTaskAdapter: TaskAdapter
+    
+    var toolbar : Toolbar = view.findViewById(R.id.toolbar)
+    toolbar.inflateMenu(R.menu.search)
+
+    mSearchView = (SearchView) toolbar.getMenu().findItem(R.id.menu_search).getActionView()
+    mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        override fun onQueryTextSubmit(s: String) {
+            return false
+        }
+        override fun onQueryTextChange(s: String) {
+            return false
+        }
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
-
-        searchView.setOnClickListener { view ->
-            val intent = Intent(this@MainActivity, InputActivity::class.java)
-            startActivity(intent)
-        }
 
         fab.setOnClickListener { view ->
             val intent = Intent(this@MainActivity, InputActivity::class.java)

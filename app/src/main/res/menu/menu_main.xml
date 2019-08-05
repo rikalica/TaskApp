@@ -3,8 +3,9 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="jp.techacademy.rika.hataji.taskapp.MainActivity">
     <item
-            android:id="@+id/menu_info"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="Info"
-            app:showAsAction="always"/>
+            android:id="@+id/menu_search"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="@string/menu_search"
+            app:actionViewClass="android.support.v7.widget.SearchView"
+            app:showAsAction="always" />
 </menu>

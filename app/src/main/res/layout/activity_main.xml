@@ -12,15 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:contentInsetStart="2dp"
-            app:contentInsetStartWithNavigation="2dp"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-        <android.support.v7.widget.SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-    </android.support.v7.widget.Toolbar>
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
     <ListView
             android:id="@+id/listView1"
             android:layout_width="match_parent"
