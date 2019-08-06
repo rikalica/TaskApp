@@ -12,6 +12,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 
 
@@ -43,10 +44,12 @@ class MainActivity : AppCompatActivity() {
         //mSearchView.setOnQueryTextListener(mSearchView.OnQueryTextListener() {
         mSearchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String) : Boolean {
-                return false
+                searchListView(s)
+                return true
             }
             override fun onQueryTextChange(s: String) :Boolean {
-                return false
+                searchListView(s)
+                return true
             }
         })
 
@@ -117,6 +120,20 @@ class MainActivity : AppCompatActivity() {
     private fun reloadListView() {
         // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
         val taskRealmResults = mRealm.where(Task::class.java).findAll().sort("date", Sort.DESCENDING)
+
+        // 上記の結果を、TaskList としてセットする
+        mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
+
+        // TaskのListView用のアダプタに渡す
+        listView1.adapter = mTaskAdapter
+
+        // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+        mTaskAdapter.notifyDataSetChanged()
+    }
+
+    private fun searchListView(word : String) {
+        // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
+        val taskRealmResults = mRealm.where(Task::class.java).equalTo("category", word).findAll().sort("date", Sort.DESCENDING)
 
         // 上記の結果を、TaskList としてセットする
         mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
