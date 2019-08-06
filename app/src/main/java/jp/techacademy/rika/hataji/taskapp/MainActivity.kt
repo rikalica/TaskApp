@@ -42,10 +42,10 @@ class MainActivity : AppCompatActivity() {
         mSearchView = toolbar.getMenu().findItem(R.id.menu_search).getActionView() as SearchView
         //mSearchView.setOnQueryTextListener(mSearchView.OnQueryTextListener() {
         mSearchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(s: String) {
+            override fun onQueryTextSubmit(s: String) : Boolean {
                 return false
             }
-            override fun onQueryTextChange(s: String) {
+            override fun onQueryTextChange(s: String) :Boolean {
                 return false
             }
         })
